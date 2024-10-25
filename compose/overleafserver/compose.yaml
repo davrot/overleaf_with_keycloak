@@ -1,0 +1,97 @@
+services:
+  overleafserver:
+    image: "sharelatex/sharelatex:5.1.1"
+    container_name: overleafserver
+    hostname: overleafserver
+    restart: always
+    volumes:
+      - /docker/compose/overleafserver/data:/var/lib/overleaf
+      - /var/run/docker.sock:/var/run/docker.sock
+
+# OpenID
+      - /docker/compose/overleafserver/openid/services//web/app/src/Features/Authentication/AuthenticationController.js:/overleaf/services/web/app/src/Features/Authentication/AuthenticationController.js
+      - /docker/compose/overleafserver/openid/services/web/app/views/user/login.pug:/overleaf/services/web/app/views/user/login.pug
+      - /docker/compose/overleafserver/openid/services/web/app/src/Features/User/UserPrimaryEmailCheckHandler.js:/overleaf/services/web/app/src/Features/User/UserPrimaryEmailCheckHandler.js
+      - /docker/compose/overleafserver/openid/services/web/app/src/infrastructure/Server.js:/overleaf/services/web/app/src/infrastructure/Server.js
+      - /docker/compose/overleafserver/openid/services/web/app/src/router.js:/overleaf/services/web/app/src/router.js
+      - /docker/compose/overleafserver/openid/services/web/app/src/models/User.js:/overleaf/services/web/app/src/models/User.js
+      - /docker/compose/overleafserver/openid/services/web/app/views/layout/navbar-marketing-bootstrap-5.pug:/overleaf/services/web/app/views/layout/navbar-marketing-bootstrap-5.pug
+      - /docker/compose/overleafserver/openid/services/web/app/views/layout/navbar-marketing.pug:/overleaf/services/web/app/views/layout/navbar-marketing.pug
+      - /docker/compose/overleafserver/openid/services/web/app/views/layout/navbar-website-redesign.pug:/overleaf/services/web/app/views/layout/navbar-website-redesign.pug
+      - /docker/compose/overleafserver/openid/services/web/package.json:/overleaf/services/web/package.json
+
+# Track Changes
+      - /docker/compose/overleafserver/track/web/app/src/Features/Project/ProjectEditorHandler.js:/overleaf/services/web/app/src/Features/Project/ProjectEditorHandler.js
+      - /docker/compose/overleafserver/track/web/modules/track-changes/app/src/TrackChangesController.js:/overleaf/services/web/modules/track-changes/app/src/TrackChangesController.js
+      - /docker/compose/overleafserver/track/web/modules/track-changes/app/src/TrackChangesRouter.js:/overleaf/services/web/modules/track-changes/app/src/TrackChangesRouter.js
+      - /docker/compose/overleafserver/track/web/modules/track-changes/index.js:/overleaf/services/web/modules/track-changes/index.js
+# Fix latex shell escape
+      - /docker/compose/overleafserver/escape/LatexRunner.js:/overleaf/services/clsi/app/js/LatexRunner.js
+      - /docker/compose/overleafserver/track/web/config/settings.defaults.js:/overleaf/services/web/config/settings.defaults.js
+
+
+    ports:
+      - 11001:80
+    environment:
+      GIT_BRIDGE_ENABLED: "false"
+      GIT_BRIDGE_HOST: "git-bridge"
+      GIT_BRIDGE_PORT: "8000"
+
+      REDIS_HOST: "overleafredis"
+      REDIS_PORT: "6379"
+      OVERLEAF_REDIS_HOST: "overleafredis"
+
+      V1_HISTORY_URL: "http://127.0.0.1:3100/api"
+      OVERLEAF_MONGO_URL: "mongodb://overleafmongo/sharelatex"
+      OVERLEAF_APP_NAME: "FB1 University of Bremen Overleaf"
+      ENABLED_LINKED_FILE_TYPES: "project_file,project_output_file"
+      ENABLE_CONVERSIONS: "true"
+      EMAIL_CONFIRMATION_DISABLED: "false"
+      OVERLEAF_BEHIND_PROXY: "true"
+      OVERLEAF_SECURE_COOKIE: "true"
+      OVERLEAF_SITE_URL: "https://overleaf.fb1.uni-bremen.de"
+      OVERLEAF_NAV_TITLE: "FB1 Overleaf"
+
+      OVERLEAF_ADMIN_EMAIL: "overleaf@uni-bremen.de"
+      OVERLEAF_EMAIL_FROM_ADDRESS: "overleaf@uni-bremen.de"
+      OVERLEAF_EMAIL_SMTP_HOST: "smtp.uni-bremen.de"
+      OVERLEAF_EMAIL_SMTP_PORT: "465"
+      OVERLEAF_EMAIL_SMTP_SECURE: "true"
+      OVERLEAF_EMAIL_SMTP_USER: "overleaf"
+      OVERLEAF_EMAIL_SMTP_PASS: ${EMAIL_PASS}
+      OVERLEAF_EMAIL_SMTP_LOGGER: "true"
+      OVERLEAF_CUSTOM_EMAIL_FOOTER: "This system is run by the ITP"
+      # OVERLEAF_EMAIL_SMTP_IGNORE_TLS: "true"
+      # OVERLEAF_EMAIL_SMTP_TLS_REJECT_UNAUTH: "false"
+
+      OIDC_ISSUER: "https://overleaf.fb1.uni-bremen.de/sso/realms/master"
+      OIDC_AUTHORIZATION_URL: "https://overleaf.fb1.uni-bremen.de/sso/realms/master/protocol/openid-connect/auth"
+      OIDC_TOKEN_URL: "https://overleaf.fb1.uni-bremen.de/sso/realms/master/protocol/openid-connect/token"
+      OIDC_USERINFO_URL: "https://overleaf.fb1.uni-bremen.de/sso/realms/master/protocol/openid-connect/userinfo"
+      OIDC_CALLBACK_URL: "https://overleaf.fb1.uni-bremen.de/login/oidc/callback"
+      OIDC_CLIENT_ID: "overleaf"
+      OIDC_CLIENT_SECRET: ${CLIENT_SECRET}
+
+      DOCKER_RUNNER: 'true'
+      TEXLIVE_IMAGE_USER: 'www-data'
+      COMPILES_HOST_DIR: "/docker/compose/overleafserver/data/data/compiles"
+      SANDBOXED_COMPILES: 'true'
+      SANDBOXED_COMPILES_SIBLING_CONTAINERS: 'true'
+      SANDBOXED_COMPILES_HOST_DIR: "/docker/compose/overleafserver/data/data/compiles"
+      TEXLIVE_IMAGE: texlive/texlive:latest-full
+      SYNCTEX_BIN_HOST_PATH: "/docker/compose/overleafserver/data/bin/synctex"
+
+    networks:
+      - overleaf-network
+
+    entrypoint: >
+      /bin/sh -c "cd /overleaf/services/web && npm install passport-openidconnect && cd / && /sbin/my_init"
+
+volumes:
+  overleaf_data:
+
+
+networks:
+  overleaf-network:
+    external: true
+
