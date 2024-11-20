@@ -1,14 +1,10 @@
 docker network create keycloak-network
+nid=`docker network ls | grep keycloak-network | awk '{print $1}'`
+ufw allow in on br-$nid
+ufw route allow in on br-$nid
+ufw route allow out on br-$nid
+iptables -t nat -A POSTROUTING ! -o br-$nid -s 172.19.0.0/16 -j MASQUERADE
 
-# FIREWALL NOTES:
-
-# Add the overlead-network to the firewall
-docker network ls | grep keycloak-network
-ufw allow in on br-ce72840c8b70
-ufw route allow in on br-ce72840c8b70
-ufw route allow out on br-ce72840c8b70
-iptables -t nat -A POSTROUTING ! -o br-ce72840c8b70 -s 172.19.0.0/16 -j MASQUERADE
-
-# For removing firewall settings we don't want:
-ufw status numbered
-ufw delete [NUMBER]
+# # For removing firewall settings we don't want:
+# ufw status numbered
+# ufw delete [NUMBER]
