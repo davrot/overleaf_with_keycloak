@@ -7,3 +7,8 @@ find openid -type f | sed s/"openid"/"\/overleaf"/g | awk '{print "docker exec -
 ## track
 docker exec -it overleafserver bash -ce "mkdir -p /var/lib/overleaf/to_mod/track"
 find track -type f | sed s/"track"/"\/overleaf\/services"/g | awk '{print "docker exec -it overleafserver bash -ce \"cp " $1 " /var/lib/overleaf/to_mod/track/ \""}' >> todo_files.sh
+
+sh todo_files.sh
+rm todo_files.sh
+
+

@@ -1,0 +1,28 @@
+--- openid/services/web/app/src/router.js	2024-12-05 15:27:44.217830811 +0000
++++ /docker/compose/overleafserver/data/to_mod/openid/router.js	2024-12-05 16:52:38.099888618 +0000
+@@ -219,12 +219,6 @@
+   webRouter.get('/login', UserPagesController.loginPage)
+   AuthenticationController.addEndpointToLoginWhitelist('/login')
+ 
+-  webRouter.get('/login/oidc', AuthenticationController.oidcLogin)
+-  AuthenticationController.addEndpointToLoginWhitelist('/login/oidc')
+-
+-  webRouter.get('/login/oidc/callback', AuthenticationController.oidcLoginCallback)
+-  AuthenticationController.addEndpointToLoginWhitelist('/login/oidc/callback')
+-
+   webRouter.post(
+     '/login',
+     CaptchaMiddleware.validateCaptcha('login'),
+@@ -265,12 +259,6 @@
+     webRouter.get('/register', UserPagesController.registerPage)
+     AuthenticationController.addEndpointToLoginWhitelist('/register')
+   }
+-  else {
+-    webRouter.get('/register', function (req, res, next) {
+-      res.redirect('/login')
+-    })
+-    AuthenticationController.addEndpointToLoginWhitelist('/register')
+-  }
+ 
+   EditorRouter.apply(webRouter, privateApiRouter)
+   CollaboratorsRouter.apply(webRouter, privateApiRouter)

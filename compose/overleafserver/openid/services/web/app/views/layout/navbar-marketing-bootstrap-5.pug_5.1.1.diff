@@ -1,0 +1,18 @@
+--- openid/services/web/app/views/layout/navbar-marketing-bootstrap-5.pug	2024-12-05 15:27:44.217830811 +0000
++++ /docker/compose/overleafserver/data/to_mod/openid/navbar-marketing-bootstrap-5.pug	2024-12-05 16:52:38.467884191 +0000
+@@ -133,13 +133,13 @@
+ 						// login link
+ 						+nav-item
+ 							+nav-link(
+-								href="/login/oidc"
++								href="/login"
+ 								event-tracking="menu-clicked-login"
+ 								event-tracking-action="clicked"
+ 								event-tracking-trigger="click"
+ 								event-tracking-mb="true"
+ 								event-segmentation={ page: currentUrl }
+-							) #{translate("log_in")}
++							) #{translate('log_in')}
+ 
+ 					// projects link and account menu
+ 					if getSessionUser()
