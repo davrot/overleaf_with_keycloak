@@ -1,4 +1,4 @@
-1. Clone the repo
+1. Clone the repo via git clone https://github.com/davrot/overleaf_with_keycloak.git
 2. Go into the directories keycloakpostgres  keycloakserver  nginx  overleafmongo  overleafredis  overleafregister  overleafserver. There modify the .env and the compose.yaml to your setup.
 3. Put your SSL certificates into nginx as ca.pem (public certificate plus certificate chain) and key.pem (private key).
 4. Make you system docker ready and make the system ready to send emails (example below)
