@@ -1,8 +1,8 @@
 services:
   overleafnginx:
     image: nginx:stable-alpine
-    container_name: overleafnginx
-    hostname: overleafnginx
+    container_name: nginx
+    hostname: nginx
     restart: always
     volumes:
       - "/docker/compose/nginx/key.pem:/certs/nginx_key.pem:ro"
