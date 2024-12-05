@@ -10,7 +10,8 @@
 10. In keycloakserver do up.sh
 11. In overleafserver do up.sh
 12. In nginx do up.sh
-13. Now we can go into the keycloack server to get the client id and secrets.
+13. In check_users do up.sh
+14. Now we can go into the keycloack server to get the client id and secrets.
 [... To be continued]
 
 
