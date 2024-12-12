@@ -1,7 +1,0 @@
-{    
-    "keycloak_url": "https://overleaf.fb1.uni-bremen.de/sso",
-    "admin_username": "REDACTED",
-    "admin_password": "REDACTED",
-    "client_id": "REDACTED",
-    "client_secret": "REDACTED"
-}
