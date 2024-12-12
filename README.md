@@ -1,21 +1,7 @@
-# Some installation notes
+I am slowly distroying this repo. Most of it is updated and migrated here: 
 
-1. Clone the repo via git clone https://github.com/davrot/overleaf_with_keycloak.git
-2. Go into the directories keycloakpostgres  keycloakserver  nginx  overleafmongo  overleafredis  overleafregister  overleafserver. There modify the .env and the compose.yaml according to your setup.
-3. Put your SSL certificates into nginx as ca.pem (public certificate plus certificate chain) and key.pem (private key).
-4. Make you system docker ready and make the system ready to send emails (example below)
-5. Go to overleafregister and run make_image.sh
-6. In overleafregister do up.sh (later overleafregister/data/config.json needs to be filled with the correct parameters but for that you need a running keycloack)
-7. In overleafredis do up.sh
-8. In overleafmongo do up.sh
-9. In keycloakpostgres do up.sh
-10. In keycloakserver do up.sh
-11. In overleafserver do up.sh
-12. In nginx do up.sh
-13. In check_users do up.sh
-14. Now we can go into the keycloack server to get the client id and secrets (see how_to_keycloak_A).
-    
-[... To be continued]
+https://github.com/davrot/HajTex_living_with_keycloak
+
 
 # Docker and eMail (Ubuntu)
 
